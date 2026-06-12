@@ -1,3 +1,8 @@
+// Описаний у документації
+import iziToast from 'izitoast';
+// Додатковий імпорт стилів
+import 'izitoast/dist/css/iziToast.min.css';
+
 import { getImagesByQuery } from './js/pixabay-api.js';
 import {
   createGallery,
@@ -21,6 +26,15 @@ form.addEventListener('submit', event => {
 
   getImagesByQuery(searchQuery)
     .then(data => {
+      if (data.hits.length === 0) {
+        iziToast.error({
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+          position: 'topRight',
+        });
+
+        return;
+      }
       createGallery(data.hits);
     })
     .catch(error => console.log(error));
