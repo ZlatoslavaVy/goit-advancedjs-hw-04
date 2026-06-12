@@ -23,6 +23,7 @@ form.addEventListener('submit', event => {
   }
 
   clearGallery();
+  showLoader();
 
   getImagesByQuery(searchQuery)
     .then(data => {
@@ -37,5 +38,8 @@ form.addEventListener('submit', event => {
       }
       createGallery(data.hits);
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log(error))
+    .finally(() => {
+      hideLoader();
+    });
 });

@@ -3,9 +3,16 @@ import SimpleLightbox from 'simplelightbox';
 // Додатковий імпорт стилів
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const exemplar = new SimpleLightbox('.gallery a');
+const exemplar = new SimpleLightbox('.gallery a', {
+  captions: true,
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
+
 const refs = {
   gallery: document.querySelector('.gallery'),
+  loader: document.querySelector('.loader'),
 };
 
 export function createGallery(images) {
@@ -56,9 +63,9 @@ export function clearGallery() {
 }
 
 export function showLoader() {
-  // Implementation for showing loader
+  refs.loader.classList.remove('is-hidden');
 }
 
 export function hideLoader() {
-  // Implementation for hiding loader
+  refs.loader.classList.add('is-hidden');
 }
