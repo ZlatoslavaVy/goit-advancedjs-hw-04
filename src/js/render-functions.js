@@ -3,17 +3,12 @@ import SimpleLightbox from 'simplelightbox';
 // Додатковий імпорт стилів
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const exemplar = new SimpleLightbox('.gallery a', {
-  captions: true,
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  captionDelay: 250,
-});
-
 const refs = {
   gallery: document.querySelector('.gallery'),
   loader: document.querySelector('.loader'),
 };
+
+let exemplar = null;
 
 export function createGallery(images) {
   const markup = images
@@ -55,7 +50,16 @@ export function createGallery(images) {
     })
     .join('');
   refs.gallery.innerHTML = markup;
-  exemplar.refresh();
+  if (exemplar) {
+    exemplar.refresh();
+  } else {
+    exemplar = new SimpleLightbox('.gallery a', {
+      captions: true,
+      captionsData: 'alt',
+      captionPosition: 'bottom',
+      captionDelay: 250,
+    });
+  }
 }
 
 export function clearGallery() {
