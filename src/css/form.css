@@ -1,9 +1,13 @@
 .form {
-  gap: 8px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 main {
-  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
+  position: relative;
+  box-sizing: border-box;
 }
