@@ -9,23 +9,35 @@ import {
   clearGallery,
   showLoader,
   hideLoader,
+  showLoadMoreButton,
+  hideLoadMoreButton,
 } from './js/render-functions.js';
 
-const form = document.querySelector('.form');
+// Збираємо елементи
+const refs = {
+  form: document.querySelector('.form'),
+  loadMoreBtn: document.querySelector('.load-more-btn'),
+};
 
-form.addEventListener('submit', event => {
+let page = 1;
+let query = '';
+
+// Прослуховуємо кнопку Search
+refs.form.addEventListener('submit', event => {
   event.preventDefault();
 
-  const searchQuery = event.target.elements['search-text'].value.trim();
+    const query = event.target.elements['search-text'].value.trim();
+    page = 1;
 
-  if (searchQuery === '') {
+  if (query === '') {
     return;
   }
 
   clearGallery();
+  hideLoadMoreButton();
   showLoader();
 
-  getImagesByQuery(searchQuery)
+  getImagesByQuery(query)
     .then(data => {
       if (data.hits.length === 0) {
         iziToast.error({
@@ -37,9 +49,31 @@ form.addEventListener('submit', event => {
         return;
       }
       createGallery(data.hits);
+      hideLoadMoreButton();
+      showLoadMoreButton();
     })
     .catch(error => console.log(error))
     .finally(() => {
       hideLoader();
     });
 });
+
+
+const onLoadMore = async () => {
+    try {
+        page++;
+        const data = await getImagesByQuery(query, page);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// Прослуховуємо "Завантажити більше"
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
+
+
+const initPostsGallery = async () => {
+    try {
+        const data = await getImagesByQuery(query, page);
+    }
+}
