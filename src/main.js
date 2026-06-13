@@ -26,8 +26,8 @@ let query = '';
 refs.form.addEventListener('submit', event => {
   event.preventDefault();
 
-    const query = event.target.elements['search-text'].value.trim();
-    page = 1;
+  query = event.target.elements['search-text'].value.trim();
+  page = 1;
 
   if (query === '') {
     return;
@@ -58,22 +58,15 @@ refs.form.addEventListener('submit', event => {
     });
 });
 
-
 const onLoadMore = async () => {
-    try {
-        page++;
-        const data = await getImagesByQuery(query, page);
-    } catch (err) {
-        console.log(err);
-    }
-}
+  try {
+    page++;
+    const data = await getImagesByQuery(query, page);
+    createGallery(data.hits);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 // Прослуховуємо "Завантажити більше"
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
-
-
-const initPostsGallery = async () => {
-    try {
-        const data = await getImagesByQuery(query, page);
-    }
-}

@@ -1,0 +1,8 @@
+.is-hidden {
+  display: none;
+}
+
+.load-more-btn {
+  display: block;
+  margin: 0 auto;
+}
