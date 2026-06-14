@@ -21,6 +21,7 @@ const refs = {
 
 let page = 1;
 let query = '';
+let totalPages;
 
 // Прослуховуємо кнопку Search
 refs.form.addEventListener('submit', event => {
