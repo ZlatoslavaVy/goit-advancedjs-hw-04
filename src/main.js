@@ -37,7 +37,7 @@ refs.form.addEventListener('submit', event => {
   hideLoadMoreButton();
   showLoader();
 
-  getImagesByQuery(query)
+  getImagesByQuery(query, page)
     .then(data => {
       if (data.hits.length === 0) {
         iziToast.error({
@@ -63,6 +63,11 @@ const onLoadMore = async () => {
     page++;
     const data = await getImagesByQuery(query, page);
     createGallery(data.hits);
+    // let totalPages = data.totalHits / data.per_page;
+    // if (page === totalPages) {
+    //   refs.loadMoreBtn.classList.add('is-hidden');
+    //   refs.loadMoreBtn.removeEventListener('click', onLoadMore);
+    // }
   } catch (err) {
     console.log(err);
   }
