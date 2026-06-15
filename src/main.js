@@ -3,7 +3,7 @@ import iziToast from 'izitoast';
 // Додатковий імпорт стилів
 import 'izitoast/dist/css/iziToast.min.css';
 
-import { getImagesByQuery } from './js/pixabay-api.js';
+import { getImagesByQuery, PER_PAGE } from './js/pixabay-api.js';
 import {
   createGallery,
   clearGallery,
@@ -21,7 +21,6 @@ const refs = {
 
 let page = 1;
 let query = '';
-let totalPages;
 
 // Прослуховуємо кнопку Search
 refs.form.addEventListener('submit', event => {
@@ -50,8 +49,14 @@ refs.form.addEventListener('submit', event => {
         return;
       }
       createGallery(data.hits);
-      hideLoadMoreButton();
-      showLoadMoreButton();
+
+      if (page * PER_PAGE < data.totalHits) {
+        showLoadMoreButton();
+      } else {
+        hideLoadMoreButton();
+        // Повідомлення про кінець результатів тут можна не виводити,
+        // бо користувач тільки-но зробив перший пошук.
+      }
     })
     .catch(error => console.log(error))
     .finally(() => {
@@ -64,19 +69,22 @@ const onLoadMore = async () => {
     showLoader();
     hideLoadMoreButton();
     page++;
-    console.log('запит page:', page);
     const data = await getImagesByQuery(query, page);
-    console.log('отримано hits:', data.hits.length);
-    createGallery(data.hits);
-    totalPages = Math.ceil(data.totalHits / 15);
-    if (page >= totalPages) {
+
+    const cardHeight = createGallery(data.hits);
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+
+    if (page * PER_PAGE < data.totalHits) {
+      showLoadMoreButton();
+    } else {
       hideLoadMoreButton();
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
-        position: 'bottomRight',
+        position: 'topRight',
       });
-    } else {
-      showLoadMoreButton();
     }
   } catch (err) {
     console.log(err);

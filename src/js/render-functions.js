@@ -51,6 +51,9 @@ export function createGallery(images) {
     })
     .join('');
   refs.gallery.insertAdjacentHTML('beforeend', markup);
+  // Після того як нові фото відрендерились:
+  const card = refs.gallery.querySelector('.gallery-item');
+  const cardHeight = card.getBoundingClientRect().height;
   if (exemplar) {
     exemplar.refresh();
   } else {
@@ -61,10 +64,17 @@ export function createGallery(images) {
       captionDelay: 250,
     });
   }
+  return cardHeight;
 }
 
 export function clearGallery() {
   refs.gallery.innerHTML = '';
+
+  // Якщо лайтбокс уже існував, знищуємо його та зачищаємо змінну
+  if (exemplar) {
+    exemplar.destroy();
+    exemplar = null;
+  }
 }
 
 export function showLoader() {
