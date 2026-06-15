@@ -61,16 +61,27 @@ refs.form.addEventListener('submit', event => {
 
 const onLoadMore = async () => {
   try {
+    showLoader();
+    hideLoadMoreButton();
     page++;
+    console.log('запит page:', page);
     const data = await getImagesByQuery(query, page);
+    console.log('отримано hits:', data.hits.length);
     createGallery(data.hits);
-    // let totalPages = data.totalHits / data.per_page;
-    // if (page === totalPages) {
-    //   refs.loadMoreBtn.classList.add('is-hidden');
-    //   refs.loadMoreBtn.removeEventListener('click', onLoadMore);
-    // }
+    totalPages = Math.ceil(data.totalHits / 15);
+    if (page >= totalPages) {
+      hideLoadMoreButton();
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'bottomRight',
+      });
+    } else {
+      showLoadMoreButton();
+    }
   } catch (err) {
     console.log(err);
+  } finally {
+    hideLoader();
   }
 };
 
